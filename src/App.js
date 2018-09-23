@@ -16,9 +16,15 @@ class Timer extends Component {
     this.state = {
       minutes: this.props.state.minutes,
       seconds: this.props.state.seconds,
-      running: false
+      running: false,
+      session: 'session'
     }
     this.start_timer = this.start_timer.bind(this)
+    this.reset = this.reset.bind(this)
+    this.start_pause_timer = this.start_pause_timer.bind(this)
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
   }
   countdown() {
     if (Number(this.state.seconds) === 0) {
@@ -44,13 +50,18 @@ class Timer extends Component {
       clearInterval(this.timer)
     }
   }
+  reset() {
+    clearInterval(this.timer)
+    this.setState({running: false})
+    this.props.reset()
+  }
   render() {
     return (
       <div>
         <h4 id='timer-label'>{this.state.session}</h4>
         <h2 id='time-left'>{this.state.minutes}:{this.state.seconds}</h2>
-        <button id='start_stop' onClick={this.start_timer}><FontAwesomeIcon icon={faPlay} /><FontAwesomeIcon icon={faPause} /></button>
-        <button id='reset' onClick={this.props.reset}><FontAwesomeIcon icon={faSync} /></button>
+        <button id='start_stop' onClick={this.start_pause_timer}><FontAwesomeIcon icon={faPlay} /><FontAwesomeIcon icon={faPause} /></button>
+        <button id='reset' onClick={this.reset}><FontAwesomeIcon icon={faSync} /></button>
       </div>
     )
   }
