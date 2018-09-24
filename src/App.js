@@ -17,16 +17,45 @@ class Timer extends Component {
       minutes: this.props.state.minutes,
       seconds: this.props.state.seconds,
       running: false,
-      session: 'session'
+      session: 'session',
+      break: false
     }
     this.start_timer = this.start_timer.bind(this)
     this.reset = this.reset.bind(this)
     this.start_pause_timer = this.start_pause_timer.bind(this)
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
+    this.setState({
+      minutes: nextProps.state.minutes,
+      seconds: nextProps.state.seconds
+    })
+  }
+  break_time() {
+    clearInterval(this.timer)
+    this.setState({
+      session: 'break',
+      minutes: this.props.state.break,
+      break: true
+    })
+    this.start_timer()
+  }
+  newSession() {
+    clearInterval(this.timer)
+    this.setState({
+      session: 'session',
+      minutes: this.props.state.minutes,
+      break: false
+    })
+    this.start_timer()
   }
   countdown() {
+    if (Number(this.state.seconds) === 0 && Number(this.state.minutes) === 0) {
+      if (this.state.break) {
+        this.newSession()
+      } else{
+        this.break_time()
+      }
+    }
     if (Number(this.state.seconds) === 0) {
       this.setState({
         minutes: String(Number(this.state.minutes) - 1),
@@ -52,14 +81,19 @@ class Timer extends Component {
   }
   reset() {
     clearInterval(this.timer)
-    this.setState({running: false})
+    this.setState(
+      {running: false,
+       session: 'session',
+       break: false})
     this.props.reset()
   }
   render() {
+    let min = this.state.minutes
+    let sec = this.state.seconds
     return (
       <div>
         <h4 id='timer-label'>{this.state.session}</h4>
-        <h2 id='time-left'>{this.state.minutes}:{this.state.seconds}</h2>
+        <h2 id='time-left'>{(min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec)}</h2>
         <button id='start_stop' onClick={this.start_pause_timer}><FontAwesomeIcon icon={faPlay} /><FontAwesomeIcon icon={faPause} /></button>
         <button id='reset' onClick={this.reset}><FontAwesomeIcon icon={faSync} /></button>
       </div>
@@ -72,7 +106,7 @@ class App extends Component {
     super(props)
     this.state = {
       minutes: '25',
-      seconds: '00',
+      seconds: '0',
       break: '5',
       running: false,
       session: 'session',
@@ -121,7 +155,7 @@ class App extends Component {
   reset() {
     this.setState({
       minutes: '25',
-      seconds: '00',
+      seconds: '0',
       break: '5',
       running: false
     })
