@@ -16,6 +16,7 @@ class Timer extends Component {
     this.state = {
       minutes: this.props.state.minutes,
       seconds: this.props.state.seconds,
+      break_minutes: this.props.state.break,
       running: false,
       session: 'session',
       break: false
@@ -27,14 +28,16 @@ class Timer extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       minutes: nextProps.state.minutes,
-      seconds: nextProps.state.seconds
+      seconds: nextProps.state.seconds,
+      break_minutes: nextProps.state.break
     })
   }
   break_time() {
     clearInterval(this.timer)
     this.setState({
       session: 'break',
-      minutes: this.props.state.break,
+      minutes: this.state.break_minutes,
+      seconds: '01',
       break: true
     })
     this.start_timer()
@@ -44,6 +47,7 @@ class Timer extends Component {
     this.setState({
       session: 'session',
       minutes: this.props.state.minutes,
+      seconds: '01',
       break: false
     })
     this.start_timer()
