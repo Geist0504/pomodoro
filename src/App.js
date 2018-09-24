@@ -52,6 +52,9 @@ class Timer extends Component {
     })
     this.start_timer()
   }
+  playSound() {
+    this.Audio_timer = setInterval(() => this.sound_file.play(), 1500)
+  }
   countdown() {
     if (Number(this.state.seconds) === 0 && Number(this.state.minutes) === 0) {
       if (this.state.break) {
@@ -95,11 +98,13 @@ class Timer extends Component {
     let min = this.state.minutes
     let sec = this.state.seconds
     return (
-      <div>
+      <div id='timer'>
         <h4 id='timer-label'>{this.state.session}</h4>
         <h2 id='time-left'>{(min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec)}</h2>
-        <button id='start_stop' onClick={this.start_pause_timer}><FontAwesomeIcon icon={faPlay} /><FontAwesomeIcon icon={faPause} /></button>
-        <button id='reset' onClick={this.reset}><FontAwesomeIcon icon={faSync} /></button>
+        <div id='timer-buttons'>
+          <button id='start_stop' onClick={this.start_pause_timer}><FontAwesomeIcon icon={faPlay} /><FontAwesomeIcon icon={faPause} /></button>
+          <button id='reset' onClick={this.reset}><FontAwesomeIcon icon={faSync} /></button>
+        </div>
       </div>
     )
   }
