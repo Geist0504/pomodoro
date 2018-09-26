@@ -90,16 +90,14 @@ class Timer extends Component {
     }
   }
   reset() {
-    if (this.state.playing) {
-      this.audio.pause()
-      this.audio.currentTime = 0
-      this.setState({ playing: false })
-    }
     clearInterval(this.timer)
     this.setState(
       {running: false,
        session: 'session',
-       break: false})
+       break: false,
+       playing: false})
+    this.audio.pause()
+    this.audio.currentTime = 0
     this.props.reset()
   }
   play = () => {
