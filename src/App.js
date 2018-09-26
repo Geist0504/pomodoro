@@ -19,11 +19,13 @@ class Timer extends Component {
       break_minutes: this.props.state.break,
       running: false,
       session: 'session',
-      break: false
+      break: false,
+      audio_playing: false
     }
     this.start_timer = this.start_timer.bind(this)
     this.reset = this.reset.bind(this)
     this.start_pause_timer = this.start_pause_timer.bind(this)
+    this.audio = document.getElementById('beep')
   }
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -61,6 +63,7 @@ class Timer extends Component {
         this.newSession()
       } else{
         this.break_time()
+        this.play()
       }
     }
     if (Number(this.state.seconds) === 0) {
@@ -87,12 +90,21 @@ class Timer extends Component {
     }
   }
   reset() {
+    if (this.state.playing) {
+      this.audio.pause()
+      this.audio.currentTime = 0
+      this.setState({ playing: false })
+    }
     clearInterval(this.timer)
     this.setState(
       {running: false,
        session: 'session',
        break: false})
     this.props.reset()
+  }
+  play = () => {
+    this.setState({playing:true})
+    this.audio.play()
   }
   render() {
     let min = this.state.minutes
@@ -105,6 +117,9 @@ class Timer extends Component {
           <button id='start_stop' onClick={this.start_pause_timer}><FontAwesomeIcon icon={faPlay} /><FontAwesomeIcon icon={faPause} /></button>
           <button id='reset' onClick={this.reset}><FontAwesomeIcon icon={faSync} /></button>
         </div>
+        <audio id='beep' preload='auto'
+          src='http://www.peter-weinberg.com/files/1014/8073/6015/BeepSound.wav'
+          ref={(audio) => { this.audio = audio; }} />
       </div>
     )
   }
