@@ -8,8 +8,6 @@ import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { faSync } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faArrowDown)
-
 class Timer extends Component {
   constructor(props) {
     super(props)
@@ -18,7 +16,7 @@ class Timer extends Component {
       seconds: this.props.state.seconds,
       break_minutes: this.props.state.break,
       running: false,
-      session: 'session',
+      session: 'Session',
       break: false,
       audio_playing: false
     }
@@ -93,7 +91,7 @@ class Timer extends Component {
     clearInterval(this.timer)
     this.setState(
       {running: false,
-       session: 'session',
+       session: 'Session',
        break: false,
        playing: false})
     this.audio.pause()
@@ -131,7 +129,7 @@ class App extends Component {
       seconds: '0',
       break: '5',
       running: false,
-      session: 'session',
+      session: 'Session',
       session_time: '25'
     }
     this.break_increment = this.break_increment.bind(this)
